@@ -1,0 +1,26 @@
+{
+  "name": "react-flow-yjs",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "recoil": "^0.7.4",
+    "uuid": "^8.3.2",
+    "y-protocols": "^1.0.5",
+    "y-webrtc": "^10.2.3",
+    "y-websocket": "^1.4.3",
+    "yjs": "^13.5.39"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^1.3.0",
+    "vite": "^2.9.9"
+  }
+}
