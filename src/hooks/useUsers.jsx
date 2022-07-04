@@ -22,7 +22,5 @@ export function useUsers() {
     };
   }, []);
 
-  console.log(users);
-
   return { users };
 }

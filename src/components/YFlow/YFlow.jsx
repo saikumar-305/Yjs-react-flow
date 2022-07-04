@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -15,7 +15,7 @@ import Sidebar from "./Sidebar";
 import "./index.css";
 import { useUsers } from "../../hooks/useUsers";
 import { useUser } from "../../hooks/useUser";
-import { yNodes } from "../../y";
+import { yEdges, yNodes } from "../../y";
 
 const initialNodes = [
   {
@@ -37,17 +37,24 @@ const DnDFlow = () => {
     activateUser,
     deactivateUser,
   } = useUser();
-
-  console.log({ self });
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(yNodes.toArray());
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    []
-  );
+  useEffect(() => {
+    yNodes.observeDeep(() => {
+      setNodes(yNodes.toArray());
+    });
+    yEdges.observeDeep(() => {
+      setEdges(yEdges.toArray());
+    });
+  }, [yNodes, yEdges]);
+
+  const onConnect = useCallback((params) => {
+    setEdges((eds) => addEdge(params, eds));
+    yEdges.set("edges", edges);
+  }, []);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -77,7 +84,9 @@ const DnDFlow = () => {
         data: { label: `${type} node` },
       };
 
-      setNodes((nds) => nds.concat(newNode));
+      yNodes.push([newNode]);
+
+      setNodes(yNodes.toArray());
     },
     [reactFlowInstance]
   );
